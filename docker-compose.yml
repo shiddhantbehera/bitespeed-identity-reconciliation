@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  bitespeed-identity-reconciliation-mysql-db:
+    container_name: mysql8
+    image: mysql:8.0
+    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    healthcheck:
+      test: "/usr/bin/mysql --user=${DB_USER} --password=${DB_PASSWORD} --execute \"SHOW DATABASES;\""
+      timeout: 20s
+      retries: 10
+    ports:
+      - '${DB_PORT}:3306'
+    networks:
+      - bitespeed-identity-reconciliation-back-app
+    volumes:
+      - './docker/db/data:/var/lib/mysql'
+      - './docker/db/my.cnf:/etc/mysql/conf.d/my.cnf'
+      - './docker/db/sql:/docker-entrypoint-initdb.d'
+
+  bitespeed-identity-reconciliation-back-app:
+    container_name: bitespeed-identity-reconciliation-back-app
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    ports:
+      - "${APP_PORT}:3000"
+    env_file:
+      - .env
+    depends_on:
+      bitespeed-identity-reconciliation-mysql-db:
+        condition: service_healthy
+      bitespeed-identity-reconciliation-migrate-db:
+        condition: service_completed_successfully
+    networks:
+      - bitespeed-identity-reconciliation-back-app
+    volumes:
+      - ./src:/usr/src/app/src
+
+  bitespeed-identity-reconciliation-migrate-db:
+    container_name: bitespeed-identity-reconciliation-migrate-db
+    build:
+      context: .
+      dockerfile: migration.Dockerfile
+    depends_on:
+      bitespeed-identity-reconciliation-mysql-db:
+        condition: service_healthy
+    env_file:
+      - .env
+
+networks:
+  bitespeed-identity-reconciliation-back-app:
+    driver: bridge
