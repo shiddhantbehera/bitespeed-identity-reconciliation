@@ -1,15 +1,12 @@
-import { config } from 'dotenv';
-config();
+const dotenv = require('dotenv');
+dotenv.config();
 
-const sequelizeConfig = {
-  database: process.env.DB_NAME,
-  dialect: process.env.DB_DIALECT,
-  host: process.env.DB_HOST,
-  logging: false,
-  password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT || '3306', 10),
+module.exports = {
   username: process.env.DB_USER,
-  dialectOptions: {},
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  host: process.env.DB_HOST,
+  dialect: process.env.DB_DIALECT || 'mysql',
+  port: parseInt(process.env.DB_PORT || '3306', 10),
+  logging: false,
 };
-
-export default sequelizeConfig;
