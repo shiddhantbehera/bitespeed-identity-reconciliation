@@ -1,12 +1,11 @@
 import { LinkPrecedence } from '@/common/enum/link-precedence.enum';
 import {
   AllowNull,
+  AutoIncrement,
   Column,
   CreatedAt,
   DataType,
-  Default,
   DeletedAt,
-  IsUUID,
   Model,
   PrimaryKey,
   Table,
@@ -27,11 +26,10 @@ export type CreateContactParams = Pick<ContactBase, CreationColumns>;
 })
 export class ContactBase extends Model<ContactBase, CreateContactParams> {
   @PrimaryKey
-  @IsUUID('all')
-  @Default(DataType.UUIDV4)
+  @AutoIncrement
   @AllowNull(false)
-  @Column(DataType.UUID)
-  id!: string;
+  @Column(DataType.INTEGER)
+  id!: number;
 
   @Column(DataType.STRING)
   emailAddress?: string;
@@ -44,10 +42,6 @@ export class ContactBase extends Model<ContactBase, CreateContactParams> {
 
   @Column(DataType.ENUM(...Object.values(LinkPrecedence)))
   linkPrecedence?: string;
-
-  @Default(true)
-  @Column(DataType.BOOLEAN)
-  status!: boolean;
 
   @CreatedAt
   createdAt?: Date;
