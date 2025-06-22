@@ -11,7 +11,7 @@ You can explore the API endpoints and their details using the Swagger UI:
 ## 🧪 Sample `curl` Request
 
 ```bash
-curl -X POST https://bitespeed-identity-reconciliation-mgi3.onrender.com/identify \
+curl -X POST https://bitespeed-identity-reconciliation-mgi3.onrender.com/identify-reconciliation \
   -H "Content-Type: application/json" \
   -d '{
     "email": "mcfly@hillvalley.edu",
