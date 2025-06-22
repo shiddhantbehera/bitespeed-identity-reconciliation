@@ -1,5 +1,24 @@
 # BiteSpeed Identity Reconciliation
 
+## 🔗 Link to Hosted App Swagger Documentation
+
+You can explore the API endpoints and their details using the Swagger UI:
+
+**URL**: [https://bitespeed-identity-reconciliation-mgi3.onrender.com/api/docs](https://bitespeed-identity-reconciliation-mgi3.onrender.com/api/docs)
+
+---
+
+## 🧪 Sample `curl` Request
+
+```bash
+curl -X POST https://bitespeed-identity-reconciliation-mgi3.onrender.com/identify \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "mcfly@hillvalley.edu",
+    "phoneNumber": "123456"
+  }'
+```
+---
 
 ## Getting Started
 
