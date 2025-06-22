@@ -37,24 +37,13 @@ $ run yarn or yarn add
 ```
 1. Establish mysql database connection locally
 2. Run Migration: yarn run db:migrate
-3. Run Seeders: yarn run db:seed:all
-4. Run BE APP: yarn run start:dev
+3. Run BE APP: yarn run start:dev
 ```
 
 ## Swagger
 
 ```
 URL: be-host/api/docs
-```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# test coverage
-$ yarn run test:cov
 ```
 
 ## Build App

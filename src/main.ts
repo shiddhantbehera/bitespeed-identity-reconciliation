@@ -1,9 +1,28 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  const configService = app.get<ConfigService>(ConfigService);
+  const swaggerEnvConfig = configService.get<Record<string, string>>('swagger');
+  const servicePort = configService.get<number>('port') ?? 3000;
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('BiteSpeed Identity Reconciliation')
+    .setVersion('1.0')
+    .addServer(swaggerEnvConfig?.apiUrl ?? '')
+    .addBearerAuth({
+      type: 'http',
+    })
+    .build();
+  const documentation = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api/docs', app, documentation, {
+    swaggerOptions: {
+      docExpansion: 'none',
+    },
+  });
+  await app.listen(servicePort);
 }
 bootstrap()
   .then(() => {})

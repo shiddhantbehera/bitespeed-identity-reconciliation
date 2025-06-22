@@ -44,7 +44,7 @@ export class ContactBase extends Model<ContactBase, CreateContactParams> {
   linkPrecedence?: string;
 
   @CreatedAt
-  createdAt?: Date;
+  createdAt!: Date;
 
   @UpdatedAt
   updatedAt?: Date;
