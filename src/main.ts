@@ -6,12 +6,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get<ConfigService>(ConfigService);
-  const swaggerEnvConfig = configService.get<Record<string, string>>('swagger');
   const servicePort = configService.get<number>('port') ?? 3000;
   const swaggerConfig = new DocumentBuilder()
     .setTitle('BiteSpeed Identity Reconciliation')
     .setVersion('1.0')
-    .addServer(swaggerEnvConfig?.apiUrl ?? '')
     .addBearerAuth({
       type: 'http',
     })

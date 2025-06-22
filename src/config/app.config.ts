@@ -8,7 +8,4 @@ export default () => ({
     user: process.env.DB_USER,
   },
   port: parseInt(process.env.APP_PORT ?? '3000', 10),
-  swagger: {
-    apiUrl: process.env.SWAGGER_API_URL ?? 'http://localhost:3000',
-  },
 });
