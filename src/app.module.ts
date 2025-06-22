@@ -6,6 +6,7 @@ import configuration from './config/app.config';
 import { validate } from './config/env.validation';
 import { ModelsModule } from './models';
 import { RepositoryModule } from './repository';
+import { IdentifyReconciliationModule } from './routes/identify-reconciliation';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RepositoryModule } from './repository';
     DbModule,
     ModelsModule,
     RepositoryModule,
+    IdentifyReconciliationModule,
   ],
   controllers: [AppController],
   providers: [],

@@ -1,5 +1,12 @@
 import { Contact, CreateContactParams } from '../../models';
-import { FindAndCountOptions, FindOptions, Transaction } from 'sequelize';
+import {
+  FindAndCountOptions,
+  FindOptions,
+  Op,
+  Transaction,
+  WhereOptions,
+} from 'sequelize';
+import { LinkPrecedence } from '../../common/enum/link-precedence.enum';
 import { InjectModel } from '@nestjs/sequelize';
 
 export class ContactRepository {
@@ -40,5 +47,33 @@ export class ContactRepository {
 
   findAndCountAllByClause(clause: FindAndCountOptions<Contact>) {
     return this.contactModel.findAndCountAll(clause);
+  }
+
+  async findContactsByEmailOrPhone(
+    email?: string,
+    phoneNumber?: string,
+  ): Promise<Contact[]> {
+    const whereOptions: WhereOptions<Contact> = {};
+    if (email && phoneNumber) {
+      whereOptions[Op.and] = [
+        {
+          [Op.or]: [{ emailAddress: email }, { phoneNumber }],
+        },
+      ];
+    } else if (email) {
+      whereOptions[Op.and] = [{ emailAddress: email }];
+    } else if (phoneNumber) {
+      whereOptions[Op.and] = [{ phoneNumber }];
+    }
+    return this.contactModel.findAll({ where: whereOptions });
+  }
+
+  async findSecondaryByPrimaryId(primaryId: number): Promise<Contact[]> {
+    return this.contactModel.findAll({
+      where: {
+        linkedId: primaryId,
+        linkPrecedence: LinkPrecedence.SECONDARY,
+      },
+    });
   }
 }
